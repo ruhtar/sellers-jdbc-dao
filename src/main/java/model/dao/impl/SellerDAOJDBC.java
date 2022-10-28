@@ -44,16 +44,9 @@ public class SellerDAOJDBC implements SellerDAO {
             rs = st.executeQuery();
 
             if (rs.next()){
-                Department dep = new Department();
-                dep.setId(rs.getInt("DepartmentId"));
-                dep.setName(rs.getString("DepName"));
-                Seller seller = new Seller();
-                seller.setId(rs.getInt("Id"));
-                seller.setName(rs.getString("Name"));
-                seller.setEmail(rs.getString("Email"));
-                seller.setBirthDate(rs.getDate("BirthDate"));
-                seller.setBaseSalary(rs.getDouble("BaseSalary"));
-                seller.setDepartment(dep); //Associação de ojbetos
+                Department dep = instantiateDepartament(rs);
+                Seller seller = instantiateSeller(rs, dep);
+                //Associação de objetos
                 return seller;
             }
             return null;
@@ -65,6 +58,24 @@ public class SellerDAOJDBC implements SellerDAO {
 //            DB.closeConnection(); Não precisa fechar a conexão. Você pode precisar do objeto DAO para fazer mais de uma operação
             //Então o ideal é que vc só feche essa conexão no entrypoint
         }
+    }
+
+    private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+        Seller seller = new Seller();
+        seller.setId(rs.getInt("Id"));
+        seller.setName(rs.getString("Name"));
+        seller.setEmail(rs.getString("Email"));
+        seller.setBirthDate(rs.getDate("BirthDate"));
+        seller.setBaseSalary(rs.getDouble("BaseSalary"));
+        seller.setDepartment(dep);
+        return seller;
+    }
+
+    private Department instantiateDepartament (ResultSet rs) throws SQLException { //progrando a exceção
+        Department dep = new Department();
+        dep.setId(rs.getInt("DepartmentId"));
+        dep.setName(rs.getString("DepName"));
+        return dep;
     }
 
     @Override
