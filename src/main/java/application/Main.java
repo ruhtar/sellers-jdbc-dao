@@ -1,5 +1,6 @@
-package org.example;
+package application;
 
+import db.DB;
 import model.dao.DaoFactory;
 import model.dao.SellerDAO;
 import model.entities.Department;
@@ -12,8 +13,10 @@ public class Main {
         Department dp = new Department(1, "opa");
         Seller sl = new Seller(1,"Vendedor", "tutu@gmail", new Date(), 944.49, dp);
 
-        SellerDAO sellerDAO = DaoFactory.createSellerDAO();
+        SellerDAO sellerDAOJDBC = DaoFactory.createSellerDAO();
+        Seller seller = sellerDAOJDBC.findById(3);
+        System.out.println(seller);
 
-        System.out.println(sl);
+        DB.closeConnection();
     }
 }
